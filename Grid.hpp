@@ -19,7 +19,8 @@ public:
     Grid(int rows, int cols, int x, int y);
     void drawTo(RenderWindow &window);
     void click(int x, int y);
-    void update();
+    void update(bool play);
+    int vecinos(int i, int j);
 };
 
 #endif

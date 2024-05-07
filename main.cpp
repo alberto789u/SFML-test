@@ -5,7 +5,8 @@ using namespace sf;
 
 int width = 400;
 int height = 400;
-int numcells = 20;
+int numcells = 10;
+bool play = 0;
 int main()
 {
     RenderWindow window(VideoMode(width, height), "SFML works!");
@@ -26,11 +27,13 @@ int main()
                     int y = event.mouseButton.y;
                     grid.click(x, y);
                 }
+                if (event.mouseButton.button == Mouse::Right)
+                    play = !play;
             }
         }
 
         window.clear();
-        grid.update();
+        grid.update(play);
         grid.drawTo(window);
         window.display();
     }

@@ -57,30 +57,58 @@ void Grid::click(int x, int y)
     tablero[indexX][indexY] = (tablero[indexX][indexY] + 1) % 2;
     next[indexX][indexY] = (next[indexX][indexY] + 1) % 2;
 }
-void Grid::update()
+int Grid::vecinos(int i, int j)
 {
-    for (int i = 0; i < this->rows; i++)
+
+    int h = 0;
+
+    if (i - 1 >= 0)
+        if (j - 1 >= 0)
+            h += tablero[i - 1][j - 1];
+    if (j - 1 >= 0)
+        h += tablero[i][j - 1];
+    if (j - 1 >= 0)
+        if (i + 1 < this->rows)
+            h += tablero[i + 1][j - 1];
+    if (i - 1 >= 0)
+        h += tablero[i - 1][j];
+    if (i + 1 < this->rows)
+        h += tablero[i + 1][j];
+    if (i - 1 >= 0)
+        if (j + 1 < this->cols)
+            h += tablero[i - 1][j + 1];
+    if (j + 1 < this->cols)
+        h += tablero[i][j + 1];
+    if (i + 1 < this->rows)
+        if (j + 1 < this->cols)
+            h += tablero[i + 1][j + 1];
+
+    return h;
+}
+void Grid::update(bool play)
+{
+    this->next = vector<vector<int>>(rows, vector<int>(cols, 0));
+    if (play)
     {
-        for (int j = 0; j < this->cols; j++)
+        for (int i = 0; i < this->rows; i++)
         {
-            if (this->tablero[i][j] == 1)
+            for (int j = 0; j < this->cols; j++)
             {
-                if (j == this->cols - 1)
-                    this->next[i][j] = 1;
-                else
+                cout << vecinos(i, j) << endl;
+                if (this->tablero[i][j] == 0)
                 {
-                    if (this->next[i][j + 1] == 0)
-                    {
-                        this->next[i][j + 1] = 1;
-                        this->next[i][j] = 0;
-                    }
-                    else
-                    {
+                    if (vecinos(i, j) == 3)
                         this->next[i][j] = 1;
-                    }
+                }
+                if (this->tablero[i][j] == 1)
+                {
+                    if (vecinos(i, j) == 2 || vecinos(i, j) == 3)
+                        this->next[i][j] = 1;
+                    else
+                        this->next[i][j] = 0;
                 }
             }
         }
+        this->tablero = this->next;
     }
-    this->tablero = this->next;
 }
